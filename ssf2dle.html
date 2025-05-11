@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Get Selected Value in Dropdown
+        List using JavaScript
+    </title>
+</head>
+
+<style>
+    h1, p, label {
+        text-align: center;
+    }
+
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 20%;
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    select, button {
+        width: 200px;
+        padding: 5px;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    button {
+        background-color: green;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: darkgreen;
+    }
+</style>
+
+
+
+<body>
+    <h1 style="color: green">
+        SSF2DLE
+    </h1>
+
+    <p>
+        <b>Guess the move: </b>
+    </p>
+
+    <img src="https://bristolsbasement.com/wp-content/uploads/2025/02/2025-01-17-00-58-25-16.gif" alt="pichu backair" class="center">
+
+    <p>
+        What's the move
+        </p>
+
+    <div class="form-container">
+    <label>Select the character:</label>
+    <select id="select1">
+        <option value="Bandana Dee">Bandana Dee</option>
+        <option value="Black Mage">Black Mage</option>
+        <option value="Bomberman">Bomberman</option>
+        <option value="Bowser">Bowser</option>
+        <option value="Captain Falcon">Captain Falcon</option>
+        <option value="Chibi-Robo">Chibi-Robo</option>
+        <option value="Donkey Kong">Donkey Kong</option>
+        <option value="Falco">Falco</option>
+        <option value="Fox">Fox</option>
+        <option value="Ganondorf">Ganondorf</option>
+        <option value="Goku">Goku</option>
+        <option value="Ichigo">Ichigo</option>
+        <option value="Isaac">Isaac</option>
+        <option value="Jigglypuff">Jigglypuff</option>
+        <option value="Kirby">Kirby</option>
+        <option value="Krystal">Krystal</option>
+        <option value="Link">Link</option>
+        <option value="Lloyd">Lloyd</option>
+        <option value="Lucario">Lucario</option>
+        <option value="Luffy">Luffy</option>
+        <option value="Luigi">Luigi</option>
+        <option value="Mario">Mario</option>
+        <option value="Marth">Marth</option>
+        <option value="Mega Man">Mega Man</option>
+        <option value="Meta Knight">Meta Knight</option>
+        <option value="Mr. Game & Watch">Mr. Game & Watch</option>
+        <option value="Naruto">Naruto</option>
+        <option value="Ness">Ness</option>
+        <option value="PAC-MAN">PAC-MAN</option>
+        <option value="Peach">Peach</option>
+        <option value="Pichu">Pichu</option>
+        <option value="Pikachu">Pikachu</option>
+        <option value="Pit">Pit</option>
+        <option value="Rayman">Rayman</option>
+        <option value="Ryu">Ryu</option>
+        <option value="Samus">Samus</option>
+        <option value="Sandbag">Sandbag</option>
+        <option value="Sheik">Sheik</option>
+        <option value="Simon">Simon</option>
+        <option value="Sonic">Sonic</option>
+        <option value="Sora">Sora</option>
+        <option value="Tails">Tails</option>
+        <option value="Waluigi">Waluigi</option>
+        <option value="Wario">Wario</option>
+        <option value="Yoshi">Yoshi</option>
+        <option value="Zelda">Zelda</option>
+        <option value="Zero Suit Samus">Zero Suit Samus</option>
+    </select>
+
+    <label>Select the move:</label>
+    <select id="select2">
+        <option value="Jab">Jab</option>
+        <option value="Up Tilt">Up Tilt</option>
+        <option value="Down Tilt">Down Tilt</option>
+        <option value="Forward Tilt">Forward Tilt</option>
+        <option value="Up Smash">Up Smash</option>
+        <option value="Down Smash">Down Smash</option>
+        <option value="Forward Smash">Forward Smash</option>
+        <option value="Dash Attack">Dash Attack</option>
+        <option value="Grab">Grab</option>
+        <option value="Neutral Air">Neutral Air</option>
+        <option value="Up Air">Up Air</option>
+        <option value="Down Air">Down Air</option>
+        <option value="Forward Air">Forward Air</option>
+        <option value="Back Air">Back Air</option>
+        <option value="Neutral B">Neutral B</option>
+        <option value="Up B">Up B</option>
+        <option value="Down B">Down B</option>
+        <option value="Side B">Side B</option>
+    </select>
+    </div>
+    <p>
+        <b>Result:</b> <span class="output"></span>
+    </p>
+
+    <button onclick="checkAnswer()">
+        Check Answer
+    </button>
+
+    <script>
+        // Predefined correct answer
+        const correctCharacter = "Meta Knight";
+        const correctMove = "Neutral B";
+        let attempts = 0;
+
+        function checkAnswer() {
+            // Get selected values
+            const selectedCharacter = document.querySelector('#select1').value;
+            const selectedMove = document.querySelector('#select2').value;
+
+            attempts++;
+            
+            // Output result
+            let resultMessage = `You selected: ${selectedCharacter} - ${selectedMove}. `;
+
+            if (selectedCharacter === correctCharacter && selectedMove === correctMove) {
+                resultMessage += `Correct! It took you ${attempts} guesses.`;
+                attempts = 0;
+            } else {
+                resultMessage += "Incorrect!";
+            }
+
+            document.querySelector('.output').textContent = resultMessage;
+        }
+    </script>
+</body>
+
+</html>
