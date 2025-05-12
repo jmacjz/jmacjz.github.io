@@ -55,14 +55,41 @@
 </head>
 <body>
   <h1 style="color: white">SSF2DLE</h1>
+  <h2 style="color: white">Guess the character and move this hitbox belongs to</h2>
   <img id="gif" src="https://i.ibb.co/QzcwJ40/ezgif-com-crop.gif" alt="ezgif-com-speed-3" alt="guess gif" style="border: 5px solid #7d7d7d;" width="600" height="300" />
   <p></p>
+  
   <div id="guesses-container"></div>
 
-  <button onclick="checkAnswer()">Check Answer</button>
+  <button id="check-button" onclick="checkAnswer()" disabled>Submit</button>
 
   <p style="color: white"><b>Result:</b> <span class="output"></span></p>
 
+    <!-- Info Button -->
+  <button id="info-button" style="position: absolute; top: 20px; right: 20px;">Info</button>
+
+    <!-- Info Popup -->
+  <div id="info-popup" style="
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    color: black;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    width: 250px;
+    text-align: left;
+    z-index: 1000;
+    ">
+  <strong>How to Play:</strong><br />
+  1. There is a new hitbox every day.<br />
+  2. The character is always facing right.<br />
+  3. Moves are performed at 0.5x speed.<br />
+  Good luck and have fun!<br />
+  
+</div>
   <script>
     const correctCharacter = "Pit";
     const correctMove = "Down Smash";
@@ -157,31 +184,41 @@
     }
 
     function createGuessRow() {
-    const container = document.getElementById("guesses-container");
-    const row = document.createElement("div");
-    row.className = "guess-row";
+        const container = document.getElementById("guesses-container");
+        const row = document.createElement("div");
+        row.className = "guess-row";
 
-    const characterSelect = document.createElement("select");
-    characterSelect.innerHTML = getFilteredOptions(characters, usedCharacters);
-    characterSelect.className = "";
-    if (characterLocked) {
-        characterSelect.disabled = true;
-        characterSelect.value = correctCharacter;
-        characterSelect.classList.add("correct");
-    }
+        const characterSelect = document.createElement("select");
+        characterSelect.innerHTML = getFilteredOptions(characters, usedCharacters);
+        characterSelect.className = "";
+        if (characterLocked) {
+            characterSelect.disabled = true;
+            characterSelect.value = correctCharacter;
+            characterSelect.classList.add("correct");
+        }
 
-    const moveSelect = document.createElement("select");
-    moveSelect.innerHTML = getFilteredOptions(moves, usedMoves);
-    moveSelect.className = "";
-    if (moveLocked) {
-        moveSelect.disabled = true;
-        moveSelect.value = correctMove;
-        moveSelect.classList.add("correct");
-    }
+        const moveSelect = document.createElement("select");
+        moveSelect.innerHTML = getFilteredOptions(moves, usedMoves);
+        moveSelect.className = "";
+        if (moveLocked) {
+            moveSelect.disabled = true;
+            moveSelect.value = correctMove;
+            moveSelect.classList.add("correct");
+        }
 
-    row.appendChild(characterSelect);
-    row.appendChild(moveSelect);
-    container.appendChild(row);
+        function updateButtonState() {
+                const btn = document.getElementById("check-button");
+                btn.disabled = !(characterSelect.value && moveSelect.value);
+        }
+
+        characterSelect.addEventListener("change", updateButtonState);
+        moveSelect.addEventListener("change", updateButtonState);
+
+        row.appendChild(characterSelect);
+        row.appendChild(moveSelect);
+        container.appendChild(row);
+
+        updateButtonState();
     }
 
     function checkAnswer() {
@@ -232,6 +269,11 @@
 
     // Initial guess row
     createGuessRow();
+
+    document.getElementById("info-button").addEventListener("click", function () {
+            const popup = document.getElementById("info-popup");
+            popup.style.display = popup.style.display === "none" ? "block" : "none";
+    });
   </script>
 </body>
 </html>
