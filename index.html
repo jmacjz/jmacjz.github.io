@@ -63,6 +63,8 @@
 
   <button id="check-button" onclick="checkAnswer()" disabled>Submit</button>
 
+  <pre id="copy-text" style="color: white; white-space: pre-wrap;"></pre>
+  <button id="copy-button" style="display: none; margin-top: 10px;">Copy Result</button>
   <p style="color: white"><b>Result:</b> <span class="output"></span></p>
 
     <!-- Info Button -->
@@ -172,6 +174,7 @@
 
     let usedCharacters = new Set();
     let usedMoves = new Set();
+    let resultRows = [];
 
     function getFilteredOptions(optionsHTML, usedSet) {
     const parser = new DOMParser();
@@ -222,50 +225,80 @@
     }
 
     function checkAnswer() {
-    const rows = document.querySelectorAll(".guess-row");
-    const lastRow = rows[rows.length - 1];
-    const characterSelect = lastRow.children[0];
-    const moveSelect = lastRow.children[1];
+        const rows = document.querySelectorAll(".guess-row");
+        const lastRow = rows[rows.length - 1];
+        const characterSelect = lastRow.children[0];
+        const moveSelect = lastRow.children[1];
 
-    const selectedCharacter = characterSelect.value;
-    const selectedMove = moveSelect.value;
+        const selectedCharacter = characterSelect.value;
+        const selectedMove = moveSelect.value;
 
-    attempts++;
+        attempts++;
 
-    characterSelect.className = "";
-    moveSelect.className = "";
+        characterSelect.className = "";
+        moveSelect.className = "";
 
-    if (selectedCharacter === correctCharacter) {
-        characterSelect.classList.add("correct");
-        characterSelect.disabled = true;
-        characterLocked = true;
-    } else {
-        characterSelect.classList.add("incorrect");
-        usedCharacters.add(selectedCharacter);
-    }
+        let rowResult = "";
 
-    if (selectedMove === correctMove) {
-        moveSelect.classList.add("correct");
-        moveSelect.disabled = true;
-        moveLocked = true;
-    } else {
-        moveSelect.classList.add("incorrect");
-        usedMoves.add(selectedMove);
-    }
+        // Check character
+        if (selectedCharacter === correctCharacter) {
+            characterSelect.classList.add("correct");
+            characterSelect.disabled = true;
+            characterLocked = true;
+            rowResult += "🟩";
+        } else {
+            characterSelect.classList.add("incorrect");
+            usedCharacters.add(selectedCharacter);
+            rowResult += "🟥";
+        }
 
-    const output = document.querySelector(".output");
-    if (
-        selectedCharacter === correctCharacter &&
-        selectedMove === correctMove
-    ) {
-        output.textContent = `Correct! It took you ${attempts} attempts.`;
-        let image = document.getElementById("gif");
-        image.src = "https://i.ibb.co/ZRDLgCbz/ezgif-com-speed-2.gif";
-    } else {
-        output.textContent = `Incorrect. Try again!`;
-        createGuessRow();
-    }
-    }
+        // Check move
+        if (selectedMove === correctMove) {
+            moveSelect.classList.add("correct");
+            moveSelect.disabled = true;
+            moveLocked = true;
+            rowResult += "🟩";
+        } else {
+            moveSelect.classList.add("incorrect");
+            usedMoves.add(selectedMove);
+            rowResult += "🟥";
+        }
+
+        // Store result visual
+        resultRows.push(rowResult);
+
+        const output = document.querySelector(".output");
+        const copyText = document.getElementById("copy-text");
+        const copyButton = document.getElementById("copy-button");
+
+        if (
+            selectedCharacter === correctCharacter &&
+            selectedMove === correctMove
+        ) {
+            output.textContent = `Correct! It took you ${attempts} attempts.`;
+            document.getElementById("gif").src = "https://i.ibb.co/ZRDLgCbz/ezgif-com-speed-2.gif";
+
+            // Format date as MM-DD-YY
+            const today = new Date();
+            const dateStr = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}-${String(today.getFullYear()).slice(2)}`;
+
+            // Compose shareable result
+            const finalResult = `SSF2dle ${dateStr}\n` + resultRows.join("\n");
+            copyText.textContent = finalResult;
+            copyButton.style.display = "inline-block";
+        } else {
+            output.textContent = `Incorrect. Try again!`;
+            createGuessRow();
+        }
+}
+    document.getElementById("copy-button").addEventListener("click", function () {
+    const text = document.getElementById("copy-text").textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Result copied to clipboard!");
+    }).catch(err => {
+        alert("Failed to copy text.");
+    });
+    });
 
     // Initial guess row
     createGuessRow();
