@@ -143,82 +143,91 @@
       <option value="Side B">Side B</option>
     `;
 
-    function createGuessRow() {
-      const container = document.getElementById("guesses-container");
-      const row = document.createElement("div");
-      row.className = "guess-row";
+    let usedCharacters = new Set();
+    let usedMoves = new Set();
 
-      const characterSelect = document.createElement("select");
-      characterSelect.innerHTML = characters;
-      characterSelect.className = "";
-      if (characterLocked) {
+    function getFilteredOptions(optionsHTML, usedSet) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(`<select>${optionsHTML}</select>`, 'text/html');
+    const select = doc.querySelector('select');
+    const options = Array.from(select.options).filter(option => {
+        return !usedSet.has(option.value) || option.value === "";
+    });
+    return options.map(option => option.outerHTML).join('');
+    }
+
+    function createGuessRow() {
+    const container = document.getElementById("guesses-container");
+    const row = document.createElement("div");
+    row.className = "guess-row";
+
+    const characterSelect = document.createElement("select");
+    characterSelect.innerHTML = getFilteredOptions(characters, usedCharacters);
+    characterSelect.className = "";
+    if (characterLocked) {
         characterSelect.disabled = true;
         characterSelect.value = correctCharacter;
         characterSelect.classList.add("correct");
-      }
+    }
 
-      const moveSelect = document.createElement("select");
-      moveSelect.innerHTML = moves;
-      moveSelect.className = "";
-      if (moveLocked) {
+    const moveSelect = document.createElement("select");
+    moveSelect.innerHTML = getFilteredOptions(moves, usedMoves);
+    moveSelect.className = "";
+    if (moveLocked) {
         moveSelect.disabled = true;
         moveSelect.value = correctMove;
         moveSelect.classList.add("correct");
-      }
+    }
 
-      row.appendChild(characterSelect);
-      row.appendChild(moveSelect);
-      container.appendChild(row);
+    row.appendChild(characterSelect);
+    row.appendChild(moveSelect);
+    container.appendChild(row);
     }
 
     function checkAnswer() {
-      const rows = document.querySelectorAll(".guess-row");
-      const lastRow = rows[rows.length - 1];
-      const characterSelect = lastRow.children[0];
-      const moveSelect = lastRow.children[1];
+    const rows = document.querySelectorAll(".guess-row");
+    const lastRow = rows[rows.length - 1];
+    const characterSelect = lastRow.children[0];
+    const moveSelect = lastRow.children[1];
 
-      const selectedCharacter = characterSelect.value;
-      const selectedMove = moveSelect.value;
+    const selectedCharacter = characterSelect.value;
+    const selectedMove = moveSelect.value;
 
-      attempts++;
+    attempts++;
 
-      // Clear previous styles
-      characterSelect.className = "";
-      moveSelect.className = "";
+    characterSelect.className = "";
+    moveSelect.className = "";
 
-      // Check character
-      if (selectedCharacter === correctCharacter) {
+    if (selectedCharacter === correctCharacter) {
         characterSelect.classList.add("correct");
         characterSelect.disabled = true;
         characterLocked = true;
-      } else {
+    } else {
         characterSelect.classList.add("incorrect");
-      }
+        usedCharacters.add(selectedCharacter);
+    }
 
-      // Check move
-      if (selectedMove === correctMove) {
+    if (selectedMove === correctMove) {
         moveSelect.classList.add("correct");
         moveSelect.disabled = true;
         moveLocked = true;
-      } else {
+    } else {
         moveSelect.classList.add("incorrect");
-      }
+        usedMoves.add(selectedMove);
+    }
 
-      // Result message
-      const output = document.querySelector(".output");
-      if (
+    const output = document.querySelector(".output");
+    if (
         selectedCharacter === correctCharacter &&
         selectedMove === correctMove
-      ) {
+    ) {
         output.textContent = `Correct! It took you ${attempts} attempts.`;
         let image = document.getElementById("gif");
         image.src = "https://i.ibb.co/ZRDLgCbz/ezgif-com-speed-2.gif";
-      } else {
+    } else {
         output.textContent = `Incorrect. Try again!`;
         createGuessRow();
-      }
-
-       
+    }
     }
 
     // Initial guess row
