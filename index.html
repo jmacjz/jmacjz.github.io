@@ -56,7 +56,7 @@
 <body>
   <h1 style="color: white">SSF2DLE</h1>
   <h2 style="color: white">Guess the character and move this hitbox belongs to</h2>
-  <img id="gif" src="https://i.ibb.co/QzcwJ40/ezgif-com-crop.gif" alt="ezgif-com-speed-3" alt="guess gif" style="border: 5px solid #7d7d7d;" width="600" height="300" />
+  <img id="gif" src="https://i.ibb.co/VWQPkK45/zerosuitupsmash.gif" alt="ezgif-com-speed-3" alt="guess gif" style="border: 5px solid #7d7d7d;" width="300" height="400" />
   <p></p>
   
   <div id="guesses-container"></div>
@@ -93,8 +93,8 @@
   
 </div>
   <script>
-    const correctCharacter = "Pit";
-    const correctMove = "Down Smash";
+    const correctCharacter = "Zero Suit Samus";
+    const correctMove = "Up Smash";
     let attempts = 0;
     let characterLocked = false;
     let moveLocked = false;
@@ -276,7 +276,7 @@
             selectedMove === correctMove
         ) {
             output.textContent = `Correct! It took you ${attempts} attempts.`;
-            document.getElementById("gif").src = "https://i.ibb.co/ZRDLgCbz/ezgif-com-speed-2.gif";
+            document.getElementById("gif").src = "https://i.ibb.co/nsGDzX81/zerosuitupsmashanswer.gif";
 
             // Format date as MM-DD-YY
             const today = new Date();
