@@ -1,177 +1,228 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>
-        Get Selected Value in Dropdown
-        List using JavaScript
-    </title>
-</head>
-
-<style>
-    h1, p, label {
+  <meta charset="UTF-8" />
+  <title>SSF2DLE</title>
+  <style>
+    body {
+        font-family: sans-serif;
         text-align: center;
+        background-image: url('https://i.ibb.co/Rpw8Bsm1/mehdi-challouf-z-Lvh-DL2lu4s-unsplash.jpg'); /* Use the direct image link */
+        background-size: cover; /* Ensure the image covers the entire page */
+        background-position: center; /* Center the image */
+        height: 100vh; /* Make sure the background covers the entire viewport */
+        margin: 0;
+
     }
 
-    .center {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 20%;
+    .guess-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
-    .form-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        margin-top: 20px;
+    select {
+      width: 200px;
+      padding: 5px;
+      font-size: 16px;
     }
 
-    select, button {
-        width: 200px;
-        padding: 5px;
-        font-size: 16px;
-        text-align: center;
+    select.correct {
+      border: 2px solid green;
+      background-color: #d4edda;
+    }
+
+    select.incorrect {
+      border: 2px solid red;
+      background-color: #f8d7da;
     }
 
     button {
-        background-color: green;
-        color: white;
-        border: none;
-        cursor: pointer;
+      background-color: green;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: none;
+      cursor: pointer;
     }
 
     button:hover {
-        background-color: darkgreen;
+      background-color: darkgreen;
     }
-</style>
-
-
-
+  </style>
+</head>
 <body>
-    <h1 style="color: green">
-        SSF2DLE
-    </h1>
+  <h1 style="color: white">SSF2DLE</h1>
+  <img id="gif" src="https://i.ibb.co/QzcwJ40/ezgif-com-crop.gif" alt="ezgif-com-speed-3" alt="guess gif" style="border: 5px solid #7d7d7d;" width="600" height="300" />
+  <p></p>
+  <div id="guesses-container"></div>
 
-    <p>
-        <b>Guess the move: </b>
-    </p>
+  <button onclick="checkAnswer()">Check Answer</button>
 
-    <img src="C:\Users\zieli\Downloads\sprites" alt="pichu backair" class="center">
+  <p style="color: white"><b>Result:</b> <span class="output"></span></p>
 
-    <p>
-        What's the move
-        </p>
+  <script>
+    const correctCharacter = "Pit";
+    const correctMove = "Down Smash";
+    let attempts = 0;
+    let characterLocked = false;
+    let moveLocked = false;
 
-    <div class="form-container">
-    <label>Select the character:</label>
-    <select id="select1">
-        <option value="Bandana Dee">Bandana Dee</option>
-        <option value="Black Mage">Black Mage</option>
-        <option value="Bomberman">Bomberman</option>
-        <option value="Bowser">Bowser</option>
-        <option value="Captain Falcon">Captain Falcon</option>
-        <option value="Chibi-Robo">Chibi-Robo</option>
-        <option value="Donkey Kong">Donkey Kong</option>
-        <option value="Falco">Falco</option>
-        <option value="Fox">Fox</option>
-        <option value="Ganondorf">Ganondorf</option>
-        <option value="Goku">Goku</option>
-        <option value="Ichigo">Ichigo</option>
-        <option value="Isaac">Isaac</option>
-        <option value="Jigglypuff">Jigglypuff</option>
-        <option value="Kirby">Kirby</option>
-        <option value="Krystal">Krystal</option>
-        <option value="Link">Link</option>
-        <option value="Lloyd">Lloyd</option>
-        <option value="Lucario">Lucario</option>
-        <option value="Luffy">Luffy</option>
-        <option value="Luigi">Luigi</option>
-        <option value="Mario">Mario</option>
-        <option value="Marth">Marth</option>
-        <option value="Mega Man">Mega Man</option>
-        <option value="Meta Knight">Meta Knight</option>
-        <option value="Mr. Game & Watch">Mr. Game & Watch</option>
-        <option value="Naruto">Naruto</option>
-        <option value="Ness">Ness</option>
-        <option value="PAC-MAN">PAC-MAN</option>
-        <option value="Peach">Peach</option>
-        <option value="Pichu">Pichu</option>
-        <option value="Pikachu">Pikachu</option>
-        <option value="Pit">Pit</option>
-        <option value="Rayman">Rayman</option>
-        <option value="Ryu">Ryu</option>
-        <option value="Samus">Samus</option>
-        <option value="Sandbag">Sandbag</option>
-        <option value="Sheik">Sheik</option>
-        <option value="Simon">Simon</option>
-        <option value="Sonic">Sonic</option>
-        <option value="Sora">Sora</option>
-        <option value="Tails">Tails</option>
-        <option value="Waluigi">Waluigi</option>
-        <option value="Wario">Wario</option>
-        <option value="Yoshi">Yoshi</option>
-        <option value="Zelda">Zelda</option>
-        <option value="Zero Suit Samus">Zero Suit Samus</option>
-    </select>
+    const characters = ` 
+      <option value="">Select character</option>
+      <option value="Bandana Dee">Bandana Dee</option>
+      <option value="Black Mage">Black Mage</option>
+      <option value="Bomberman">Bomberman</option>
+      <option value="Bowser">Bowser</option>
+      <option value="Captain Falcon">Captain Falcon</option>
+      <option value="Chibi-Robo">Chibi-Robo</option>
+      <option value="Donkey Kong">Donkey Kong</option>
+      <option value="Falco">Falco</option>
+      <option value="Fox">Fox</option>
+      <option value="Ganondorf">Ganondorf</option>
+      <option value="Goku">Goku</option>
+      <option value="Ichigo">Ichigo</option>
+      <option value="Isaac">Isaac</option>
+      <option value="Jigglypuff">Jigglypuff</option>
+      <option value="Kirby">Kirby</option>
+      <option value="Krystal">Krystal</option>
+      <option value="Link">Link</option>
+      <option value="Lloyd">Lloyd</option>
+      <option value="Lucario">Lucario</option>
+      <option value="Luffy">Luffy</option>
+      <option value="Luigi">Luigi</option>
+      <option value="Mario">Mario</option>
+      <option value="Marth">Marth</option>
+      <option value="Mega Man">Mega Man</option>
+      <option value="Meta Knight">Meta Knight</option>
+      <option value="Mr. Game & Watch">Mr. Game & Watch</option>
+      <option value="Naruto">Naruto</option>
+      <option value="Ness">Ness</option>
+      <option value="PAC-MAN">PAC-MAN</option>
+      <option value="Peach">Peach</option>
+      <option value="Pichu">Pichu</option>
+      <option value="Pikachu">Pikachu</option>
+      <option value="Pit">Pit</option>
+      <option value="Rayman">Rayman</option>
+      <option value="Ryu">Ryu</option>
+      <option value="Samus">Samus</option>
+      <option value="Sandbag">Sandbag</option>
+      <option value="Sheik">Sheik</option>
+      <option value="Simon">Simon</option>
+      <option value="Sonic">Sonic</option>
+      <option value="Sora">Sora</option>
+      <option value="Tails">Tails</option>
+      <option value="Waluigi">Waluigi</option>
+      <option value="Wario">Wario</option>
+      <option value="Yoshi">Yoshi</option>
+      <option value="Zelda">Zelda</option>
+      <option value="Zero Suit Samus">Zero Suit Samus</option>
+    `;
 
-    <label>Select the move:</label>
-    <select id="select2">
-        <option value="Jab">Jab</option>
-        <option value="Up Tilt">Up Tilt</option>
-        <option value="Down Tilt">Down Tilt</option>
-        <option value="Forward Tilt">Forward Tilt</option>
-        <option value="Up Smash">Up Smash</option>
-        <option value="Down Smash">Down Smash</option>
-        <option value="Forward Smash">Forward Smash</option>
-        <option value="Dash Attack">Dash Attack</option>
-        <option value="Grab">Grab</option>
-        <option value="Neutral Air">Neutral Air</option>
-        <option value="Up Air">Up Air</option>
-        <option value="Down Air">Down Air</option>
-        <option value="Forward Air">Forward Air</option>
-        <option value="Back Air">Back Air</option>
-        <option value="Neutral B">Neutral B</option>
-        <option value="Up B">Up B</option>
-        <option value="Down B">Down B</option>
-        <option value="Side B">Side B</option>
-    </select>
-    </div>
-    <p>
-        <b>Result:</b> <span class="output"></span>
-    </p>
+    const moves = ` 
+      <option value="">Select move</option>
+      <option value="Jab">Jab</option>
+      <option value="Up Tilt">Up Tilt</option>
+      <option value="Down Tilt">Down Tilt</option>
+      <option value="Forward Tilt">Forward Tilt</option>
+      <option value="Up Smash">Up Smash</option>
+      <option value="Down Smash">Down Smash</option>
+      <option value="Forward Smash">Forward Smash</option>
+      <option value="Dash Attack">Dash Attack</option>
+      <option value="Grab">Grab</option>
+      <option value="Neutral Air">Neutral Air</option>
+      <option value="Up Air">Up Air</option>
+      <option value="Down Air">Down Air</option>
+      <option value="Forward Air">Forward Air</option>
+      <option value="Back Air">Back Air</option>
+      <option value="Neutral B">Neutral B</option>
+      <option value="Up B">Up B</option>
+      <option value="Down B">Down B</option>
+      <option value="Side B">Side B</option>
+    `;
 
-    <button onclick="checkAnswer()">
-        Check Answer
-    </button>
+    function createGuessRow() {
+      const container = document.getElementById("guesses-container");
+      const row = document.createElement("div");
+      row.className = "guess-row";
 
-    <script>
-        // Predefined correct answer
-        const correctCharacter = "Meta Knight";
-        const correctMove = "Neutral B";
-        let attempts = 0;
+      const characterSelect = document.createElement("select");
+      characterSelect.innerHTML = characters;
+      characterSelect.className = "";
+      if (characterLocked) {
+        characterSelect.disabled = true;
+        characterSelect.value = correctCharacter;
+        characterSelect.classList.add("correct");
+      }
 
-        function checkAnswer() {
-            // Get selected values
-            const selectedCharacter = document.querySelector('#select1').value;
-            const selectedMove = document.querySelector('#select2').value;
+      const moveSelect = document.createElement("select");
+      moveSelect.innerHTML = moves;
+      moveSelect.className = "";
+      if (moveLocked) {
+        moveSelect.disabled = true;
+        moveSelect.value = correctMove;
+        moveSelect.classList.add("correct");
+      }
 
-            attempts++;
-            
-            // Output result
-            let resultMessage = `You selected: ${selectedCharacter} - ${selectedMove}. `;
+      row.appendChild(characterSelect);
+      row.appendChild(moveSelect);
+      container.appendChild(row);
+    }
 
-            if (selectedCharacter === correctCharacter && selectedMove === correctMove) {
-                resultMessage += `Correct! It took you ${attempts} guesses.`;
-                attempts = 0;
-            } else {
-                resultMessage += "Incorrect!";
-            }
+    function checkAnswer() {
+      const rows = document.querySelectorAll(".guess-row");
+      const lastRow = rows[rows.length - 1];
+      const characterSelect = lastRow.children[0];
+      const moveSelect = lastRow.children[1];
 
-            document.querySelector('.output').textContent = resultMessage;
-        }
-    </script>
+      const selectedCharacter = characterSelect.value;
+      const selectedMove = moveSelect.value;
+
+      attempts++;
+
+      // Clear previous styles
+      characterSelect.className = "";
+      moveSelect.className = "";
+
+      // Check character
+      if (selectedCharacter === correctCharacter) {
+        characterSelect.classList.add("correct");
+        characterSelect.disabled = true;
+        characterLocked = true;
+      } else {
+        characterSelect.classList.add("incorrect");
+      }
+
+      // Check move
+      if (selectedMove === correctMove) {
+        moveSelect.classList.add("correct");
+        moveSelect.disabled = true;
+        moveLocked = true;
+      } else {
+        moveSelect.classList.add("incorrect");
+      }
+
+      // Result message
+      const output = document.querySelector(".output");
+      if (
+        selectedCharacter === correctCharacter &&
+        selectedMove === correctMove
+      ) {
+        output.textContent = `Correct! It took you ${attempts} attempts.`;
+        let image = document.getElementById("gif");
+        image.src = "https://i.ibb.co/ZRDLgCbz/ezgif-com-speed-2.gif";
+      } else {
+        output.textContent = `Incorrect. Try again!`;
+        createGuessRow();
+      }
+
+       
+    }
+
+    // Initial guess row
+    createGuessRow();
+  </script>
 </body>
-
 </html>
