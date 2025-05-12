@@ -283,7 +283,7 @@
             const dateStr = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}-${String(today.getFullYear()).slice(2)}`;
 
             // Compose shareable result
-            const finalResult = `SSF2dle ${dateStr}\n` + resultRows.join("\n");
+            const finalResult = `SSF2dle ${dateStr}\n` + resultRows.join("\n") + "\nhttps://jmacjz.github.io/";
             copyText.textContent = finalResult;
             copyButton.style.display = "inline-block";
         } else {
