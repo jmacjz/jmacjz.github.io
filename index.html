@@ -56,7 +56,7 @@
 <body>
   <h1 style="color: white">SSF2DLE</h1>
   <h2 style="color: white">Guess the character and move this hitbox belongs to</h2>
-  <img id="gif" src="https://i.ibb.co/VWQPkK45/zerosuitupsmash.gif" alt="ezgif-com-speed-3" alt="guess gif" style="border: 5px solid #7d7d7d;" width="300" height="400" />
+  <img id="gif" src="https://i.ibb.co/wF77VFGZ/051425answer.gif" alt="ezgif-com-speed-3" alt="guess gif" style="border: 5px solid #7d7d7d;"/>
   <p></p>
   
   <div id="guesses-container"></div>
@@ -93,7 +93,7 @@
   
 </div>
   <script>
-    const correctCharacter = "Zero Suit Samus";
+    const correctCharacter = "King Dedede";
     const correctMove = "Up Smash";
     let attempts = 0;
     let characterLocked = false;
@@ -132,6 +132,7 @@
       <option value="PAC-MAN">PAC-MAN</option>
       <option value="Peach">Peach</option>
       <option value="Pichu">Pichu</option>
+      <option value="King Dedede">King Dedede</option>
       <option value="Pikachu">Pikachu</option>
       <option value="Pit">Pit</option>
       <option value="Rayman">Rayman</option>
@@ -276,7 +277,7 @@
             selectedMove === correctMove
         ) {
             output.textContent = `Correct! It took you ${attempts} attempts.`;
-            document.getElementById("gif").src = "https://i.ibb.co/nsGDzX81/zerosuitupsmashanswer.gif";
+            document.getElementById("gif").src = "https://i.ibb.co/cXVDJDMk/051425answer.gif";
 
             // Format date as MM-DD-YY
             const today = new Date();
