@@ -38,6 +38,12 @@
       background-color: #f8d7da;
     }
 
+    #display {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color:#fafafa
+    }
+
     button {
       background-color: green;
       color: white;
@@ -57,8 +63,9 @@
   <h1 style="color: white">SSF2DLE</h1>
   <h2 style="color: white">Guess the character and move this hitbox belongs to</h2>
   <img id="gif" src="https://i.ibb.co/wF77VFGZ/051425answer.gif" alt="ezgif-com-speed-3" alt="guess gif" style="border: 5px solid #7d7d7d;"/>
-  <p></p>
   
+  <p></p>
+  <div id="display">00:00</div>
   <div id="guesses-container"></div>
 
   <button id="check-button" onclick="checkAnswer()" disabled>Submit</button>
@@ -90,9 +97,11 @@
   2. The character is always facing right.<br />
   3. Moves are performed at 0.5x speed.<br />
   Good luck and have fun!<br />
+    <div> Join the SSF2 Community Discord: — <a href="https://discord.gg/TgGMdU6mRV" target="_blank">Smash Flash Bay</a> </div>
   
 </div>
   <script>
+    
     const correctCharacter = "King Dedede";
     const correctMove = "Up Smash";
     let attempts = 0;
@@ -172,7 +181,38 @@
       <option value="Down B">Down B</option>
       <option value="Side B">Side B</option>
     `;
+      let seconds = 0;
+      let interval = null;
 
+    function updateDisplay() {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      document.getElementById('display').textContent =
+        String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+    }
+
+    function start() {
+      if (!interval) {
+        interval = setInterval(() => {
+          seconds++;
+          updateDisplay();
+        }, 1000);
+      }
+    }
+
+    function pause() {
+      clearInterval(interval);
+      interval = null;
+    }
+
+    function reset() {
+      pause();
+      seconds = 0;
+      updateDisplay();
+    }
+
+    window.onload = start;
+    
     let usedCharacters = new Set();
     let usedMoves = new Set();
     let resultRows = [];
@@ -277,6 +317,7 @@
             selectedMove === correctMove
         ) {
             output.textContent = `Correct! It took you ${attempts} attempts.`;
+            pause();
             document.getElementById("gif").src = "https://i.ibb.co/cXVDJDMk/051425answer.gif";
 
             // Format date as MM-DD-YY
@@ -284,7 +325,7 @@
             const dateStr = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}-${String(today.getFullYear()).slice(2)}`;
 
             // Compose shareable result
-            const finalResult = `SSF2dle ${dateStr}\n` + resultRows.join("\n") + "\nhttps://jmacjz.github.io/";
+            const finalResult = `SSF2dle ${dateStr}\n` + getCurrentStopwatchTime() + "\n" + resultRows.join("\n") + "\nhttps://jmacjz.github.io/";
             copyText.textContent = finalResult;
             copyButton.style.display = "inline-block";
         } else {
