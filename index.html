@@ -378,9 +378,26 @@
             output.textContent = `Correct! It took you ${attempts} attempts.`;
             document.getElementById("gif").src = answergif;
 
-            // Format date as MM-DD-YY
-            const today = new Date();
-            const dateStr = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}-${String(today.getFullYear()).slice(2)}`;
+           const today = new Date();
+
+            // Format the date in GMT
+            const formatter = new Intl.DateTimeFormat("en-GB", {
+              timeZone: "GMT",
+              year: "2-digit",
+              month: "2-digit",
+              day: "2-digit",
+            });
+
+            // Extract parts to format as MM-DD-YY
+            const parts = formatter.formatToParts(today);
+            const dateParts = {};
+            for (const part of parts) {
+              if (part.type !== "literal") {
+                dateParts[part.type] = part.value;
+              }
+            }
+
+            const dateStr = `${dateParts.month}-${dateParts.day}-${dateParts.year}`;
 
             // Compose shareable result
             const finalResult = `SSF2dle ${dateStr}\n` + getCurrentStopwatchTime() + "\n" + resultRows.join("\n") + "\nhttps://jmacjz.github.io/";
