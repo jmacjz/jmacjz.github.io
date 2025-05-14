@@ -79,11 +79,11 @@
   <h2 style="color: white">Guess the character and move this hitbox belongs to</h2>
   <img id="gif" alt="ezgif-com-speed-3" alt="guess gif" style="border: 5px solid #7d7d7d;"/>
   <p></p>
-  
+
   <div id="display">00:00</div>
   <div id="guesses-container"></div>
 
-  
+
 
   <button id="check-button" onclick="checkAnswer()" disabled>Submit</button>
 
@@ -114,7 +114,7 @@
   2. The character is always facing right.<br />
   3. Moves are performed at 0.5x speed.<br />
   Good luck and have fun!<br />
-  
+
 </div>
 
 
@@ -123,20 +123,20 @@
     Join the SSF2 Community Discord: — <a href="https://discord.gg/TgGMdU6mRV" target="_blank">Smash Flash Bay</a>
   </div>
   <script>
-    
-    const gameState = 
+
+    const gameState =
     {
       correctCharacter: null,
       correctMove: null,
     };
 
-    let answergif = null; 
+    let answergif = null;
 
     let attempts = 0;
     let characterLocked = false;
     let moveLocked = false;
 
-    const characters = ` 
+    const characters = `
       <option value="">Select character</option>
       <option value="Bandana Dee">Bandana Dee</option>
       <option value="Black Mage">Black Mage</option>
@@ -188,7 +188,7 @@
       <option value="Zero Suit Samus">Zero Suit Samus</option>
     `;
 
-    const moves = ` 
+    const moves = `
       <option value="">Select move</option>
       <option value="Jab">Jab</option>
       <option value="Up Tilt">Up Tilt</option>
